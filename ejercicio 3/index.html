@@ -1,0 +1,97 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.js"></script>
+  <script>
+  $( document ).ready(function() {
+    getDataForDatatables();
+});
+
+function getDataForDatatables2(){
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.open('GET', 'https://navarrolabs.cl/test/api',true);
+    xhttp.send();
+    xhttp.onreadystatechange = function(){ 
+        if (this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            //setDataToTable(this.responseText);
+        }
+    }
+}
+function getDataForDatatables(){
+    $.ajax({
+        url: 'https://navarrolabs.cl/test/api',
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+            setDataToTable(response);
+        },
+        error: function () {
+            alert("Algo salio masl.. <br> Intentelo denuevo!");
+        }
+    });
+}
+
+function setDataToTable(jsonData){
+	$('#employee').DataTable( {
+ pagination: "bootstrap",
+    filter:true,
+     data: jsonData.libros.AllUsers,
+    destroy: true,
+    button: true,
+    lengthMenu:[5,10,25], 
+    dom: 'Bfrtip',
+    buttons: [
+        'colvis',
+        'excel',
+        'print'
+    ],
+    pageLength: 10,
+    "columns":[  
+                {     data     :     "titulo" },  
+                {     data     :     "autor"  },  
+                {     data     :     "cate"   },
+                {"defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'><i class='material-icons'>edit</i></button><button class='btn btn-danger btn-sm btnBorrar'><i class='material-icons'>delete</i></button></div></div>"}
+           ]
+  } );
+  
+}
+
+//Editar        
+$(document).on("click", ".btnEditar", function(){		        
+    opcion = 2;//editar
+    fila = $(this).closest("tr");	        
+    user_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID		            
+    username = fila.find('td:eq(1)').text();
+    first_name = fila.find('td:eq(2)').text();
+    last_name = fila.find('td:eq(3)').text();
+    gender = fila.find('td:eq(4)').text();
+    password = fila.find('td:eq(5)').text();
+    status = fila.find('td:eq(6)').text();
+    $("#username").val(username);
+    $("#first_name").val(first_name);
+    $("#last_name").val(last_name);
+    $("#gender").val(gender);
+    $("#password").val(password);
+    $("#status").val(status);
+    $(".modal-header").css("background-color", "#007bff");
+    $(".modal-header").css("color", "white" );
+    $(".modal-title").text("Editar Usuario");		
+    $('#modalCRUD').modal('show');		   
+});
+
+
+</script>
+<table id="employee" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>titulo</th>
+                <th>autor</th>
+                <th>categoria</th>
+                <th>colvis</th><th>print</th><th>excel</th>
+            </tr>
+        </thead>
+        
+    </table>
