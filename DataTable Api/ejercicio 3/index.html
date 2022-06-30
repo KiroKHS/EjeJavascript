@@ -42,12 +42,6 @@ function setDataToTable(jsonData){
     destroy: true,
     button: true,
     lengthMenu:[5,10,25], 
-    dom: 'Bfrtip',
-    buttons: [
-        'colvis',
-        'excel',
-        'print'
-    ],
     pageLength: 10,
     "columns":[  
                 {     data     :     "titulo" },  
@@ -61,24 +55,16 @@ function setDataToTable(jsonData){
 
 //Editar        
 $(document).on("click", ".btnEditar", function(){		        
-    opcion = 2;//editar
     fila = $(this).closest("tr");	        
-    user_id = parseInt(fila.find('td:eq(0)').text()); //capturo el ID		            
-    username = fila.find('td:eq(1)').text();
-    first_name = fila.find('td:eq(2)').text();
-    last_name = fila.find('td:eq(3)').text();
-    gender = fila.find('td:eq(4)').text();
-    password = fila.find('td:eq(5)').text();
-    status = fila.find('td:eq(6)').text();
-    $("#username").val(username);
-    $("#first_name").val(first_name);
-    $("#last_name").val(last_name);
-    $("#gender").val(gender);
-    $("#password").val(password);
-    $("#status").val(status);
+    autor = parseInt(fila.find('td:eq(0)').text()); //capturo el ID		            
+    titulo   = fila.find('td:eq(1)').text();
+    categoria  = fila.find('td:eq(2)').text();
+    $("#autor").val(autor);
+    $("#titulo").val(titulo);
+    $("#categoria").val(categoria);
     $(".modal-header").css("background-color", "#007bff");
     $(".modal-header").css("color", "white" );
-    $(".modal-title").text("Editar Usuario");		
+    $(".modal-title").text("Editar Libro");		
     $('#modalCRUD').modal('show');		   
 });
 
@@ -90,7 +76,7 @@ $(document).on("click", ".btnEditar", function(){
                 <th>titulo</th>
                 <th>autor</th>
                 <th>categoria</th>
-                <th>colvis</th><th>print</th><th>excel</th>
+                <th>colvis</th>
             </tr>
         </thead>
         

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Document</title>
+</head>
+<body>
+<button id="btnCagar">Cargar</button>
+ <table style="width:100%" border="1" id="tabla">
+ <tr>
+ <th>ID</th>
+ <th>Nombres</th> 
+ <th>Apellidos</th>
+ </tr>
+ <tr>
+ <td>001</td>
+ <td>Jhon</td> 
+ <td>Doe</td>
+ </tr>
+ <tr>
+ <td>002</td>
+ <td>Maria</td> 
+ <td>Doe</td>
+ </tr>
+</table>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $( document ).ready(function() {
+    getDataForDatatables();
+});
+
+function getDataForDatatables(){
+    $.ajax({
+        url: 'https://navarrolabs.cl/test/api',
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+            setDataToTable(response);
+        },
+        error: function () {
+            alert("Algo salio masl.. <br> Intentelo denuevo!");
+        }
+    });
+}
+var d = '<tr>'+
+'<th>ID</th>'+
+'<th>Nombres</th>'+
+'<th>Apellidos</th>'+
+'</tr>';
+
+function setDataToTable(datos) {
+    console.log("data: "+datos.libros.AllUsers.id)
+ for (var i = 1; i < datos.length; i++) {
+    console.log(datos.AllUsers)
+ d+= '<tr>'+
+ '<td>'+datos.AllUsers[i].titulo+'</td>'+
+ '<td>'+datos.AllUsers[i].autor+'</td>'+
+ '<td>'+datos.AllUsers[i].cate+'</td>'+
+ '</tr>';
+ }
+ $("#tabla").append(d);
+};
+</script>
+</html>
