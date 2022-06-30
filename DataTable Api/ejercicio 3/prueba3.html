@@ -5,27 +5,32 @@
  <title>Document</title>
 </head>
 <body>
-<button id="btnCagar">Cargar</button>
- <table style="width:100%" border="1" id="tabla">
- <tr>
- <th>ID</th>
- <th>Nombres</th> 
- <th>Apellidos</th>
- </tr>
- <tr>
- <td>001</td>
- <td>Jhon</td> 
- <td>Doe</td>
- </tr>
- <tr>
- <td>002</td>
- <td>Maria</td> 
- <td>Doe</td>
- </tr>
-</table>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+
+
+
+<button id="btnCagar">Cargar</button>
+ <table style="width:100%" border="1" class="display" id="tabla">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Position</th>
+            <th>Office</th>
+        </tr>
+    </thead>
+</table>
+
+
+
+
+
+</body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.js"></script>
 <script>
   $( document ).ready(function() {
     getDataForDatatables();
@@ -37,7 +42,7 @@ function getDataForDatatables(){
         dataType: "json",
         success: function (response) {
             console.log(response)
-            setDataToTable(response);
+            setDataToTable(response.libros.AllUsers);
         },
         error: function () {
             alert("Algo salio masl.. <br> Intentelo denuevo!");
@@ -45,22 +50,52 @@ function getDataForDatatables(){
     });
 }
 var d = '<tr>'+
-'<th>ID</th>'+
-'<th>Nombres</th>'+
-'<th>Apellidos</th>'+
+'<th>Titulo</th>'+
+'<th>autor</th>'+
+'<th>categoria</th>'+'<th>estado</th>'+
 '</tr>';
 
 function setDataToTable(datos) {
-    console.log("data: "+datos.libros.AllUsers.id)
- for (var i = 1; i < datos.length; i++) {
-    console.log(datos.AllUsers)
+ for (var iteam of datos) {
+    select = ""
+        tipoEstado = ['Quiero Leer', 'Leyendo', 'Terminado' ]
+        select = '<select size="1" id="row-1-office" name="row-1-office">'
+        for (var i=0; i<=tipoEstado.length; i++){
+            if (iteam.estado  == 1+i){
+                select +=  `<option value='${iteam.estado}' selected>${tipoEstado[i]}</option>`
+            }else{
+                if(i<=3){
+                select +=  `<option value='${1+i}'>${tipoEstado[i]}</option>`
+                }
+            }
+
+            
+    }
+    select += "</select>"
  d+= '<tr>'+
- '<td>'+datos.AllUsers[i].titulo+'</td>'+
- '<td>'+datos.AllUsers[i].autor+'</td>'+
- '<td>'+datos.AllUsers[i].cate+'</td>'+
- '</tr>';
+ '<td>'+iteam.titulo+'</td>'+
+ '<td>'+iteam.autor+'</td>'+
+ '<td>'+iteam.cate+'</td><td>'+select+
+ '</td><td>'+iteam.estado+'</td></tr>';
  }
  $("#tabla").append(d);
 };
+
+$(document).ready(function () {
+    var table = $('#table').DataTable({
+        columnDefs: [
+            {
+                orderable: false,
+                targets: [1, 2, 3],
+            },
+        ],
+    });
+ 
+    $('button').click(function () {
+        var data = table.$('input, select').serialize();
+        alert('The following data would have been submitted to the server: \n\n' + data.substr(0, 120) + '...');
+        return false;
+    });
+});
 </script>
 </html>
