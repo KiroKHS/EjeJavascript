@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.js"></script>
+  <script>
+  $( document ).ready(function() {
+    getDataForDatatables();
+});
+
+function getDataForDatatables2(){
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.open('GET', 'https://navarrolabs.cl/test/api',true);
+    xhttp.send();
+    xhttp.onreadystatechange = function(){ 
+        if (this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            //setDataToTable(this.responseText);
+        }
+    }
+}
+function getDataForDatatables(){
+    $.ajax({
+        url: 'https://navarrolabs.cl/test/api',
+        dataType: "json",
+        success: function (response) {
+            console.log(response)
+            setDataToTable(response);
+        },
+        error: function () {
+            alert("Algo salio masl.. <br> Intentelo denuevo!");
+        }
+    });
+}
+
+function setDataToTable(jsonData){
+	$('#employee').DataTable( {
+ pagination: "bootstrap",
+    filter:true,
+     data: jsonData.libros.AllUsers,
+    destroy: true,
+    lengthMenu:[5,10,25],
+    pageLength: 10,
+    "columns":[  
+                {     data     :     "titulo" },  
+                {     data     :     "autor"  },  
+                {     data     :     "cate"   }  
+           ]
+  } );
+}
+</script>
+<table id="employee" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>titulo</th>
+                <th>autor</th>
+                <th>cate</th>
+            </tr>
+        </thead>
+        
+    </table>
