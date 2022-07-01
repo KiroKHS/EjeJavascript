@@ -1,32 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Document</title>
+</head>
+<body>
+
+
+
+
+    <button type="submit">Submit form</button>
+ <table style="width:100%" class="display" id="tabla">
+    <thead>
+        <tr>
+            <th>titulo</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Estado</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+</table>
+
+</body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.css"/>
   <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.22/datatables.min.js"></script>
-  <script>
+<script>
   $( document ).ready(function() {
     getDataForDatatables();
+
 });
 
-function getDataForDatatables2(){
-    const xhttp = new XMLHttpRequest();
-
-    xhttp.open('GET', 'https://navarrolabs.cl/test/api',true);
-    xhttp.send();
-    xhttp.onreadystatechange = function(){ 
-        if (this.readyState == 4 && this.status == 200){
-            console.log(this.responseText);
-            //setDataToTable(this.responseText);
-        }
-    }
-}
 function getDataForDatatables(){
     $.ajax({
         url: 'https://navarrolabs.cl/test/api',
         dataType: "json",
         success: function (response) {
             console.log(response)
-            setDataToTable(response);
+            setDataToTable(response.libros.AllUsers);
         },
         error: function () {
             alert("Algo salio masl.. <br> Intentelo denuevo!");
@@ -34,50 +48,60 @@ function getDataForDatatables(){
     });
 }
 
-function setDataToTable(jsonData){
-	$('#employee').DataTable( {
- pagination: "bootstrap",
-    filter:true,
-     data: jsonData.libros.AllUsers,
-    destroy: true,
-    button: true,
-    lengthMenu:[5,10,25], 
-    pageLength: 10,
-    "columns":[  
-                {     data     :     "titulo" },  
-                {     data     :     "autor"  },  
-                {     data     :     "cate"   },
-                {"defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-primary btn-sm btnEditar'><i class='material-icons'>edit</i></button><button class='btn btn-danger btn-sm btnBorrar'><i class='material-icons'>delete</i></button></div></div>"}
-           ]
-  } );
-  
-}
 
-//Editar        
-$(document).on("click", ".btnEditar", function(){		        
-    fila = $(this).closest("tr");	        
-    autor = parseInt(fila.find('td:eq(0)').text()); //capturo el ID		            
-    titulo   = fila.find('td:eq(1)').text();
-    categoria  = fila.find('td:eq(2)').text();
-    $("#autor").val(autor);
-    $("#titulo").val(titulo);
-    $("#categoria").val(categoria);
-    $(".modal-header").css("background-color", "#007bff");
-    $(".modal-header").css("color", "white" );
-    $(".modal-title").text("Editar Libro");		
-    $('#modalCRUD').modal('show');		   
-});
+function setDataToTable(datos) {
+var d = '<tbody>';
+ for (var iteam of datos) {
+    select = ""
+        tipoEstado = ['Quiero Leer', 'Leyendo', 'Terminado' ]
+        select = '<select size="1" id="row-1-office" name="row-1-office">'
+        for (var i=0; i<=tipoEstado.length; i++){
+            if (iteam.estado  == 1+i){
+                select +=  `<option value='${iteam.estado}' selected>${tipoEstado[i]}</option>`
+            }else{
+                if(i<=3){
+                select +=  `<option value='${1+i}'>${tipoEstado[i]}</option>`
+                }
+            }
 
+            
+    }
+    select += "</select>"
+ d+= '<tr>'+
+ '<td>'+iteam.titulo+'</td>'+
+ '<td>'+iteam.autor+'</td>'+
+ '<td>'+iteam.cate+'</td><td>'+select+
+ '</td><td>'+iteam.estado+'</td></tr>';
+ }
+ d+=`</tbody><tfoot>
+    <tr>
+        <th>titulo</th>
+        <th>Autor</th>
+        <th>Categoria</th>
+        <th>Estado</th>
+        <th>Estado</th>
+    </tr>
+</tfoot>`
+ $("#tabla").append(d);
+formatoTable();
+};
 
+function formatoTable() {
+    console.log("creando cuerpo datatable");
+    var table = $('#tabla').DataTable({
+        columnDefs: [
+            {
+                orderable: false,
+                targets: [1, 2, 3],
+            },
+        ],
+    });
+ 
+    $('button').click(function () {
+        var data = table.$('select', 'input').serialize();
+        alert('The following data would have been submitted to the server: \n\n' + data.substr(0, 120) + '...');
+        return false;
+    });
+};
 </script>
-<table id="employee" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>titulo</th>
-                <th>autor</th>
-                <th>categoria</th>
-                <th>colvis</th>
-            </tr>
-        </thead>
-        
-    </table>
+</html>
