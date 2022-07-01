@@ -9,21 +9,18 @@
 
 
 
-<button id="btnCagar">Cargar</button>
- <table style="width:100%" border="1" class="display" id="tabla">
+    <button type="submit">Submit form</button>
+ <table style="width:100%" class="display" id="tabla">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Position</th>
-            <th>Office</th>
+            <th>titulo</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Estado</th>
+            <th>Estado</th>
         </tr>
     </thead>
 </table>
-
-
-
-
 
 </body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -34,6 +31,7 @@
 <script>
   $( document ).ready(function() {
     getDataForDatatables();
+
 });
 
 function getDataForDatatables(){
@@ -49,13 +47,10 @@ function getDataForDatatables(){
         }
     });
 }
-var d = '<tr>'+
-'<th>Titulo</th>'+
-'<th>autor</th>'+
-'<th>categoria</th>'+'<th>estado</th>'+
-'</tr>';
+
 
 function setDataToTable(datos) {
+var d = '<tbody>';
  for (var iteam of datos) {
     select = ""
         tipoEstado = ['Quiero Leer', 'Leyendo', 'Terminado' ]
@@ -78,11 +73,22 @@ function setDataToTable(datos) {
  '<td>'+iteam.cate+'</td><td>'+select+
  '</td><td>'+iteam.estado+'</td></tr>';
  }
+ d+=`</tbody><tfoot>
+    <tr>
+        <th>titulo</th>
+        <th>Autor</th>
+        <th>Categoria</th>
+        <th>Estado</th>
+        <th>Estado</th>
+    </tr>
+</tfoot>`
  $("#tabla").append(d);
+formatoTable();
 };
 
-$(document).ready(function () {
-    var table = $('#table').DataTable({
+function formatoTable() {
+    console.log("creando cuerpo datatable");
+    var table = $('#tabla').DataTable({
         columnDefs: [
             {
                 orderable: false,
@@ -92,10 +98,10 @@ $(document).ready(function () {
     });
  
     $('button').click(function () {
-        var data = table.$('input, select').serialize();
+        var data = table.$('select', 'input').serialize();
         alert('The following data would have been submitted to the server: \n\n' + data.substr(0, 120) + '...');
         return false;
     });
-});
+};
 </script>
 </html>
