@@ -39,7 +39,6 @@ function getDataForDatatables(){
         url: 'https://navarrolabs.cl/test/api',
         dataType: "json",
         success: function (response) {
-            console.log(response)
             setDataToTable(response.libros.AllUsers);
         },
         error: function () {
@@ -87,7 +86,6 @@ formatoTable();
 };
 
 function formatoTable() {
-    console.log("creando cuerpo datatable");
     var table = $('#tabla').DataTable({
         columnDefs: [
             {
