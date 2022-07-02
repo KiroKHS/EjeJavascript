@@ -6,10 +6,6 @@
 </head>
 <body>
 
-
-
-
-    <button type="submit">Submit form</button>
  <table style="width:100%" class="display" id="tabla">
     <thead>
         <tr>
@@ -18,6 +14,7 @@
             <th>Categoria</th>
             <th>Estado</th>
             <th>Estado</th>
+            <th>Botones</th>
         </tr>
     </thead>
 </table>
@@ -52,33 +49,37 @@ function setDataToTable(datos) {
 var d = '<tbody>';
  for (var iteam of datos) {
     select = ""
-        tipoEstado = ['Quiero Leer', 'Leyendo', 'Terminado' ]
-        select = '<select size="1" id="row-1-office" name="row-1-office">'
+        tipoEstado = ['Quiero Leer', 'Leyendo', 'Leido' ]
+        select = `<select size="1" class="form-select" id="row-${iteam.id_libro}" name="row-${iteam.id_libro}">`
         for (var i=0; i<=tipoEstado.length; i++){
             if (iteam.estado  == 1+i){
                 select +=  `<option value='${iteam.estado}' selected>${tipoEstado[i]}</option>`
             }else{
-                if(i<=3){
+                if(i<=2){
                 select +=  `<option value='${1+i}'>${tipoEstado[i]}</option>`
                 }
             }
-
-            
     }
     select += "</select>"
  d+= '<tr>'+
  '<td>'+iteam.titulo+'</td>'+
  '<td>'+iteam.autor+'</td>'+
  '<td>'+iteam.cate+'</td><td>'+select+
- '</td><td>'+iteam.estado+'</td></tr>';
+ '</td><td>'+iteam.estado+'</td>'+
+ `<td>
+ <button type="button" id="row-${iteam.id_libro}" class="btn btn-warning" onclick="btn_Editar('row-${iteam.id_libro}')">Editar</button>
+ <button type="button" id="row-${iteam.id_libro}" class="btn btn-danger" onclick="btn_Eliminar(${iteam.id_libro})">Eliminar</button> 
+ </td> 
+</tr>`;
  }
  d+=`</tbody><tfoot>
     <tr>
-        <th>titulo</th>
+        <th>itulo</th>
         <th>Autor</th>
         <th>Categoria</th>
         <th>Estado</th>
-        <th>Estado</th>
+        <th>Valir estado</th>
+        <th>Control</th>
     </tr>
 </tfoot>`
  $("#tabla").append(d);
@@ -94,12 +95,41 @@ function formatoTable() {
             },
         ],
     });
- 
-    $('button').click(function () {
-        var data = table.$('select', 'input').serialize();
-        alert('The following data would have been submitted to the server: \n\n' + data.substr(0, 120) + '...');
-        return false;
-    });
 };
+
+
+function btn_Eliminar(id_libro){
+    var data = {
+        id_libro: id_libro
+    }
+    $.ajax({
+        url: 'https://navarrolabs.cl/test/eliminar',
+        data: data,
+        method: 'GET',
+        success: function (resp) {
+        },
+        success: function (a, b, c) {
+        },
+    });
+    location.reload();
+}
+
+function btn_Editar(id_libro){
+    var est = document.getElementById(id_libro).value;
+    var data = {
+        id_libro: id_libro.replace('row-', ''),
+        estado: est
+    }
+    $.ajax({
+        url: 'https://navarrolabs.cl/test/modificar',
+        data: data,
+        method: 'GET',
+        success: function (resp) {
+        },
+        success: function (a, b, c) {
+        },
+    });
+    location.reload();
+}
 </script>
 </html>
