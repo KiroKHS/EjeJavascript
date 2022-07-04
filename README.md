@@ -12,4 +12,5 @@ EjeJavascript es una serie de ejercicios o de pruebas para poder mejorar y apren
 Herramienta|Tipo| para que sirve
 --|--|--
 DataTable| Api| Sirve para tranformar los datos en Filas para tablas dandole Filtrao y otras herramientas basicas
+sweetalert2 | api| mensajes de pantalla como alertas o notificaciones animadas y mas esteticas
 
